@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:java="http://www.mulesoft.org/schema/mule/java"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="aa4c7d2d-a7c9-4667-9bdf-364514ab51dd" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="3e5a9d28-82c7-47ad-998d-45526d13875d" >
+		<file:connection workingDir="/tmp" />
+	</file:config>
+	<flow name="mule-terminal-simulatorFlow" doc:id="00ed2b11-daa1-4471-81ea-55772e295444" >
+		<http:listener doc:name="Listener" doc:id="62cf39aa-8b5a-443a-8ad8-06bf1e5cd80f" config-ref="HTTP_Listener_config" path="/command"/>
+		<java:invoke-static doc:name="Run command" doc:id="420f7df1-6380-4592-877c-f72eff79af07" class="com.mulesoft.test.CLISimulator" method="main(java.lang.String[])">
+			<java:args ><![CDATA[#[{
+	args: payload.command splitBy(" ")
+}]]]></java:args>
+		</java:invoke-static>
+		<file:read doc:name="Read output" doc:id="1a129fdc-31dc-4306-8a79-8912ccb10b91" config-ref="File_Config" path="mule-terminal-simulator-output.txt"/>
+		<set-payload value="#[payload]" doc:name="Return output" doc:id="ba8f754b-6f40-40c2-b5cf-3439259e28c0" />
+	</flow>
+</mule>
