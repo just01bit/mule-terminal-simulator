@@ -20,6 +20,7 @@ Deploy the app to any mule host options: on-prem, CloudHub 1.0, CloudHub 2.0, Ru
     "command" : "printenv"
 }
 ```
+![image](https://github.com/just01bit/mule-terminal-simulator/assets/42607418/74957eac-51c0-4aa7-bc98-79dacb60bb97)
 
 ## Authors
 
